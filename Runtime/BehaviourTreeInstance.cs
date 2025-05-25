@@ -6,7 +6,7 @@ using UnityEngine;
 namespace Wylbo
 {
 
-    [AddComponentMenu("TheKiwiCoder/BehaviourTreeInstance")]
+    [AddComponentMenu("Wylbo/BehaviourTreeInstance")]
     public class BehaviourTreeInstance : MonoBehaviour
     {
 
