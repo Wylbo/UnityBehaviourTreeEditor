@@ -5,10 +5,12 @@ using UnityEngine.UIElements;
 using UnityEditor;
 using UnityEditor.UIElements;
 
-namespace TheKiwiCoder {
+namespace Wylbo
+{
 
     [UxmlElement]
-    public partial class NewScriptDialogView : VisualElement {
+    public partial class NewScriptDialogView : VisualElement
+    {
 
         EditorUtility.ScriptTemplate scriptTemplate;
         TextField textField;
@@ -17,7 +19,8 @@ namespace TheKiwiCoder {
         bool isSourceParent;
         Vector2 nodePosition;
 
-        public void CreateScript(EditorUtility.ScriptTemplate scriptTemplate, NodeView source, bool isSourceParent, Vector2 position) {
+        public void CreateScript(EditorUtility.ScriptTemplate scriptTemplate, NodeView source, bool isSourceParent, Vector2 position)
+        {
             this.scriptTemplate = scriptTemplate;
             this.source = source;
             this.isSourceParent = isSourceParent;
@@ -33,12 +36,15 @@ namespace TheKiwiCoder {
             titleLabel.text = $"New {scriptTemplate.subFolder.TrimEnd('s')} Script";
 
             textField.focusable = true;
-            this.RegisterCallback<PointerEnterEvent>((e) => {
+            this.RegisterCallback<PointerEnterEvent>((e) =>
+            {
                 textField[0].Focus();
             });
 
-            textField.RegisterCallback<KeyDownEvent>((e) => {
-                if (e.keyCode == KeyCode.Return || e.keyCode == KeyCode.KeypadEnter) {
+            textField.RegisterCallback<KeyDownEvent>((e) =>
+            {
+                if (e.keyCode == KeyCode.Return || e.keyCode == KeyCode.KeypadEnter)
+                {
                     OnConfirm();
                 }
             });
@@ -46,21 +52,25 @@ namespace TheKiwiCoder {
             confirmButton.clicked -= OnConfirm;
             confirmButton.clicked += OnConfirm;
 
-            background.RegisterCallback<PointerDownEvent>((e) => {
-                e.StopImmediatePropagation(); 
+            background.RegisterCallback<PointerDownEvent>((e) =>
+            {
+                e.StopImmediatePropagation();
                 Close();
             });
         }
 
-        void Close() {
+        void Close()
+        {
             style.visibility = Visibility.Hidden;
         }
 
-        void OnConfirm() {
+        void OnConfirm()
+        {
             string scriptName = textField.text;
 
             var newNodePath = $"{BehaviourTreeEditorWindow.Instance.settings.newNodePath}";
-            if (AssetDatabase.IsValidFolder(newNodePath)) {
+            if (AssetDatabase.IsValidFolder(newNodePath))
+            {
 
                 var destinationFolder = System.IO.Path.Combine(newNodePath, scriptTemplate.subFolder);
                 var destinationPath = System.IO.Path.Combine(destinationFolder, $"{scriptName}.cs");
@@ -73,14 +83,16 @@ namespace TheKiwiCoder {
                 templateString = templateString.Replace("#SCRIPTNAME#", scriptName);
                 string scriptPath = System.IO.Path.Combine(parentPath.ToString(), destinationPath);
 
-                if (!System.IO.File.Exists(scriptPath)) {
+                if (!System.IO.File.Exists(scriptPath))
+                {
                     System.IO.File.WriteAllText(scriptPath, templateString);
 
                     // TODO: There must be a better way to survive domain reloads after script compiling than this
                     BehaviourTreeEditorWindow.Instance.pendingScriptCreate.pendingCreate = true;
                     BehaviourTreeEditorWindow.Instance.pendingScriptCreate.scriptName = scriptName;
                     BehaviourTreeEditorWindow.Instance.pendingScriptCreate.nodePosition = nodePosition;
-                    if (source != null) {
+                    if (source != null)
+                    {
                         BehaviourTreeEditorWindow.Instance.pendingScriptCreate.sourceGuid = source.node.guid;
                         BehaviourTreeEditorWindow.Instance.pendingScriptCreate.isSourceParent = isSourceParent;
                     }
@@ -88,17 +100,23 @@ namespace TheKiwiCoder {
                     AssetDatabase.Refresh();
                     confirmButton.SetEnabled(false);
                     EditorApplication.delayCall += WaitForCompilation;
-                } else {
+                }
+                else
+                {
                     Debug.LogError($"Script with that name already exists:{scriptPath}");
                     Close();
                 }
-            } else {
+            }
+            else
+            {
                 Debug.LogError($"Invalid folder path:{newNodePath}. Check the project configuration settings 'newNodePath' is configured to a valid folder");
             }
         }
 
-        void WaitForCompilation() {
-            if (EditorApplication.isCompiling) {
+        void WaitForCompilation()
+        {
+            if (EditorApplication.isCompiling)
+            {
                 EditorApplication.delayCall += WaitForCompilation;
                 return;
             }

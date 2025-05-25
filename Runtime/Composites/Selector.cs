@@ -2,24 +2,33 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace TheKiwiCoder {
-    
+namespace Wylbo
+{
+
     [System.Serializable]
-    public class Selector : CompositeNode {
+    public class Selector : CompositeNode
+    {
 
-        protected override void OnStart() {
+        protected override void OnStart()
+        {
 
         }
 
-        protected override void OnStop() {
+        protected override void OnStop()
+        {
         }
 
-        protected override State OnUpdate() {
-            for (int i = 0; i < children.Count; ++i) {
+        protected override State OnUpdate()
+        {
+            for (int i = 0; i < children.Count; ++i)
+            {
                 var childStatus = children[i].Update();
-                if (childStatus == State.Running) {
+                if (childStatus == State.Running)
+                {
                     return State.Running;
-                } else if (childStatus == State.Success) {
+                }
+                else if (childStatus == State.Success)
+                {
                     return State.Success;
                 }
             }

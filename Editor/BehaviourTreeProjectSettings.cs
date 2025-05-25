@@ -6,9 +6,11 @@ using UnityEngine;
 using UnityEngine.UIElements;
 using UnityEditor.UIElements;
 
-namespace TheKiwiCoder {
+namespace Wylbo
+{
     // Create a new type of Settings Asset.
-    public class BehaviourTreeProjectSettings : ScriptableObject {
+    public class BehaviourTreeProjectSettings : ScriptableObject
+    {
 
         [Header("Asset Settings")]
         [Tooltip("Folder where new tree assets will be created. (Must begin with 'Assets')")]
@@ -42,13 +44,16 @@ namespace TheKiwiCoder {
         //[HideInInspector]
         public BehaviourTreeEditorWindowState windowState = new BehaviourTreeEditorWindowState();
 
-        static BehaviourTreeProjectSettings FindSettings() {
+        static BehaviourTreeProjectSettings FindSettings()
+        {
             var guids = AssetDatabase.FindAssets($"t:{nameof(BehaviourTreeProjectSettings)}");
-            if (guids.Length > 1) {
+            if (guids.Length > 1)
+            {
                 Debug.LogWarning($"Found multiple settings files, using the first.");
             }
 
-            switch (guids.Length) {
+            switch (guids.Length)
+            {
                 case 0:
                     return null;
                 default:
@@ -57,9 +62,11 @@ namespace TheKiwiCoder {
             }
         }
 
-        internal static BehaviourTreeProjectSettings GetOrCreateSettings() {
+        internal static BehaviourTreeProjectSettings GetOrCreateSettings()
+        {
             var settings = FindSettings();
-            if (settings == null) {
+            if (settings == null)
+            {
                 settings = ScriptableObject.CreateInstance<BehaviourTreeProjectSettings>();
                 AssetDatabase.CreateAsset(settings, "Assets/BehaviourTreeProjectSettings.asset");
                 AssetDatabase.SaveAssets();
@@ -67,32 +74,39 @@ namespace TheKiwiCoder {
             return settings;
         }
 
-        internal static SerializedObject GetSerializedSettings() {
+        internal static SerializedObject GetSerializedSettings()
+        {
             return new SerializedObject(GetOrCreateSettings());
         }
     }
 
     // Register a SettingsProvider using UIElements for the drawing framework:
-    static class MyCustomSettingsUIElementsRegister {
+    static class MyCustomSettingsUIElementsRegister
+    {
         [SettingsProvider]
-        public static SettingsProvider CreateMyCustomSettingsProvider() {
+        public static SettingsProvider CreateMyCustomSettingsProvider()
+        {
             // First parameter is the path in the Settings window.
             // Second parameter is the scope of this setting: it only appears in the Settings window for the Project scope.
-            var provider = new SettingsProvider("Project/BehaviourTreeProjectSettings", SettingsScope.Project) {
+            var provider = new SettingsProvider("Project/BehaviourTreeProjectSettings", SettingsScope.Project)
+            {
                 label = "BehaviourTree",
                 // activateHandler is called when the user clicks on the Settings item in the Settings window.
-                activateHandler = (searchContext, rootElement) => {
+                activateHandler = (searchContext, rootElement) =>
+                {
                     var settings = BehaviourTreeProjectSettings.GetSerializedSettings();
 
                     // rootElement is a VisualElement. If you add any children to it, the OnGUI function
                     // isn't called because the SettingsProvider uses the UIElements drawing framework.
-                    var title = new Label() {
+                    var title = new Label()
+                    {
                         text = "Behaviour Tree Settings"
                     };
                     title.AddToClassList("title");
                     rootElement.Add(title);
 
-                    var properties = new VisualElement() {
+                    var properties = new VisualElement()
+                    {
                         style =
                         {
                             flexDirection = FlexDirection.Column

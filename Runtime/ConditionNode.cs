@@ -3,29 +3,36 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-namespace TheKiwiCoder {
+namespace Wylbo
+{
 
     [System.Serializable]
-    public abstract class ConditionNode : ActionNode {
+    public abstract class ConditionNode : ActionNode
+    {
 
         public bool invert = false;
 
-        protected override void OnStart() {
+        protected override void OnStart()
+        {
 
         }
 
-        protected override void OnStop() {
+        protected override void OnStop()
+        {
 
         }
 
-        protected override State OnUpdate() {
+        protected override State OnUpdate()
+        {
             bool isTrue = CheckCondition();
 
-            if (invert) {
+            if (invert)
+            {
                 isTrue = !isTrue;
             }
 
-            if (isTrue) {
+            if (isTrue)
+            {
                 return State.Success;
             }
             return State.Failure;

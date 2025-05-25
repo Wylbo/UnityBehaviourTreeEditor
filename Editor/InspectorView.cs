@@ -6,24 +6,30 @@ using UnityEngine.UIElements;
 using UnityEditor;
 using UnityEditor.UIElements;
 
-namespace TheKiwiCoder {
+namespace Wylbo
+{
 
     [UxmlElement]
-    public partial class InspectorView : VisualElement {
+    public partial class InspectorView : VisualElement
+    {
 
-        public InspectorView() {
+        public InspectorView()
+        {
 
         }
 
-        internal void UpdateSelection(SerializedBehaviourTree serializer, NodeView nodeView) {
+        internal void UpdateSelection(SerializedBehaviourTree serializer, NodeView nodeView)
+        {
             Clear();
 
-            if (nodeView == null) {
+            if (nodeView == null)
+            {
                 return;
             }
 
             var nodeProperty = serializer.FindNode(serializer.Nodes, nodeView.node);
-            if (nodeProperty == null) {
+            if (nodeProperty == null)
+            {
                 return;
             }
 

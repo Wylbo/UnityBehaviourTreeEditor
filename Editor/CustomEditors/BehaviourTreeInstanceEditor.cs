@@ -2,11 +2,14 @@ using UnityEditor;
 using UnityEngine.UIElements;
 using UnityEditor.UIElements;
 
-namespace TheKiwiCoder {
+namespace Wylbo
+{
     [CustomEditor(typeof(BehaviourTreeInstance))]
-    public class BehaviourTreeInstanceEditor : Editor {
+    public class BehaviourTreeInstanceEditor : Editor
+    {
 
-        public override VisualElement CreateInspectorGUI() {
+        public override VisualElement CreateInspectorGUI()
+        {
 
             VisualElement container = new VisualElement();
 

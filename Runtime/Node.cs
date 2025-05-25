@@ -2,11 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace TheKiwiCoder {
+namespace Wylbo
+{
 
     [System.Serializable]
-    public abstract class Node {
-        public enum State {
+    public abstract class Node
+    {
+        public enum State
+        {
             Running,
             Failure,
             Success
@@ -20,13 +23,16 @@ namespace TheKiwiCoder {
         [TextArea] public string description;
         [Tooltip("When enabled, the nodes OnDrawGizmos will be invoked")] public bool drawGizmos = false;
 
-        public virtual void OnInit() {
+        public virtual void OnInit()
+        {
             // Nothing to do here
         }
 
-        public State Update() {
+        public State Update()
+        {
 
-            if (!started) {
+            if (!started)
+            {
                 OnStart();
                 started = true;
             }
@@ -35,7 +41,8 @@ namespace TheKiwiCoder {
 
             context.tickResults[guid] = state;
 
-            if (state != State.Running) {
+            if (state != State.Running)
+            {
                 OnStop();
                 started = false;
             }
@@ -43,8 +50,10 @@ namespace TheKiwiCoder {
             return state;
         }
 
-        public void Abort() {
-            BehaviourTree.Traverse(this, (node) => {
+        public void Abort()
+        {
+            BehaviourTree.Traverse(this, (node) =>
+            {
                 node.started = false;
                 node.OnStop();
             });
@@ -56,23 +65,28 @@ namespace TheKiwiCoder {
         protected abstract void OnStop();
         protected abstract State OnUpdate();
 
-        protected virtual void Log(string message) {
+        protected virtual void Log(string message)
+        {
             Debug.Log($"[{GetType()}]{message}");
         }
 
-        public Node Clone() {
+        public Node Clone()
+        {
             var clone = MemberwiseClone() as Node;
 
             // Only clone this node. Child references will be cleared
-            if (clone is DecoratorNode decorator && decorator.child != null) {
+            if (clone is DecoratorNode decorator && decorator.child != null)
+            {
                 decorator.child = null;
             }
 
-            if (clone is RootNode rootNode && rootNode.child != null) {
+            if (clone is RootNode rootNode && rootNode.child != null)
+            {
                 rootNode.child = null;
             }
 
-            if (clone is CompositeNode composite) {
+            if (clone is CompositeNode composite)
+            {
                 composite.children = new List<Node>();
             }
 

@@ -2,12 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace TheKiwiCoder {
+namespace Wylbo
+{
 
     [System.Serializable]
-    public abstract class CompositeNode : Node {
+    public abstract class CompositeNode : Node
+    {
 
-        [HideInInspector] 
+        [HideInInspector]
         [SerializeReference]
         public List<Node> children = new List<Node>();
     }

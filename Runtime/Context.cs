@@ -3,11 +3,13 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-namespace TheKiwiCoder {
+namespace Wylbo
+{
 
     // The context is a storage object for sharing common data between nodes in the tree.
     // Useful for caching components, game objects, or other data that is used by multiple nodes.
-    public class Context {
+    public class Context
+    {
 
         public GameObject gameObject;
         public Transform transform;
@@ -21,7 +23,8 @@ namespace TheKiwiCoder {
         public Dictionary<string, Node.State> tickResults;
         public float tickDelta;
 
-        public static Context CreateFromGameObject(GameObject gameObject) {
+        public static Context CreateFromGameObject(GameObject gameObject)
+        {
             // Fetch all commonly used components
             Context context = new Context();
             context.gameObject = gameObject;
@@ -37,8 +40,14 @@ namespace TheKiwiCoder {
             return context;
         }
 
-        public T GetComponent<T>() where T : Component {
+        public T GetComponent<T>() where T : Component
+        {
             return gameObject.GetComponent<T>();
+        }
+
+        public T GetComponentInChildren<T>() where T : Component
+        {
+            return gameObject.GetComponentInChildren<T>();
         }
     }
 }

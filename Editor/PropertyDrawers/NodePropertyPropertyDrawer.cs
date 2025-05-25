@@ -6,13 +6,16 @@ using UnityEditor;
 using UnityEditor.UIElements;
 using System.Runtime.Remoting.Messaging;
 
-namespace TheKiwiCoder {
+namespace Wylbo
+{
 
     [CustomPropertyDrawer(typeof(NodeProperty<>), true)]
-    public class GenericNodePropertyPropertyDrawer : PropertyDrawer {
+    public class GenericNodePropertyPropertyDrawer : PropertyDrawer
+    {
 
-        public override VisualElement CreatePropertyGUI(SerializedProperty property) {
-            
+        public override VisualElement CreatePropertyGUI(SerializedProperty property)
+        {
+
             BehaviourTree tree = property.serializedObject.targetObject as BehaviourTree;
 
             var genericTypes = fieldInfo.FieldType.GenericTypeArguments;
@@ -38,36 +41,46 @@ namespace TheKiwiCoder {
             dropdown.value = reference.managedReferenceValue as BlackboardKey;
             dropdown.tooltip = "Bind value to a BlackboardKey";
             dropdown.style.flexGrow = 1.0f;
-            dropdown.RegisterCallback<MouseEnterEvent>((evt) => {
+            dropdown.RegisterCallback<MouseEnterEvent>((evt) =>
+            {
                 dropdown.choices.Clear();
-                foreach (var key in tree.blackboard.keys) {
-                    if (propertyType.IsAssignableFrom(key.underlyingType)) {
+                foreach (var key in tree.blackboard.keys)
+                {
+                    if (propertyType.IsAssignableFrom(key.underlyingType))
+                    {
                         dropdown.choices.Add(key);
                     }
                 }
                 dropdown.choices.Add(null);
 
-                dropdown.choices.Sort((left, right) => {
-                    if (left == null) {
+                dropdown.choices.Sort((left, right) =>
+                {
+                    if (left == null)
+                    {
                         return -1;
                     }
 
-                    if (right == null) {
+                    if (right == null)
+                    {
                         return 1;
                     }
                     return left.name.CompareTo(right.name);
                 });
             });
 
-            dropdown.RegisterCallback<ChangeEvent<BlackboardKey>>((evt) => {
+            dropdown.RegisterCallback<ChangeEvent<BlackboardKey>>((evt) =>
+            {
                 BlackboardKey newKey = evt.newValue;
                 reference.managedReferenceValue = newKey;
                 BehaviourTreeEditorWindow.Instance.CurrentSerializer.ApplyChanges();
 
-                if (evt.newValue == null) {
+                if (evt.newValue == null)
+                {
                     defaultValueField.style.display = DisplayStyle.Flex;
                     dropdown.style.flexGrow = 0.0f;
-                } else {
+                }
+                else
+                {
                     defaultValueField.style.display = DisplayStyle.None;
                     dropdown.style.flexGrow = 1.0f;
                 }
@@ -87,27 +100,37 @@ namespace TheKiwiCoder {
             return container;
         }
 
-        private string FormatItem(BlackboardKey item) {
-            if (item == null) {
+        private string FormatItem(BlackboardKey item)
+        {
+            if (item == null)
+            {
                 return "[Inline]";
-            } else {
+            }
+            else
+            {
                 return item.name;
             }
         }
 
-        private string FormatSelectedItem(BlackboardKey item) {
-            if (item == null) {
+        private string FormatSelectedItem(BlackboardKey item)
+        {
+            if (item == null)
+            {
                 return "";
-            } else {
+            }
+            else
+            {
                 return item.name;
             }
         }
     }
 
     [CustomPropertyDrawer(typeof(NodeProperty), true)]
-    public class NodePropertyPropertyDrawer : PropertyDrawer {
+    public class NodePropertyPropertyDrawer : PropertyDrawer
+    {
 
-        public override VisualElement CreatePropertyGUI(SerializedProperty property) {
+        public override VisualElement CreatePropertyGUI(SerializedProperty property)
+        {
 
             BehaviourTree tree = property.serializedObject.targetObject as BehaviourTree;
 
@@ -119,17 +142,21 @@ namespace TheKiwiCoder {
             dropdown.formatSelectedValueCallback = FormatItem;
             dropdown.value = reference.managedReferenceValue as BlackboardKey;
 
-            dropdown.RegisterCallback<MouseEnterEvent>((evt) => {
+            dropdown.RegisterCallback<MouseEnterEvent>((evt) =>
+            {
                 dropdown.choices.Clear();
-                foreach (var key in tree.blackboard.keys) {
+                foreach (var key in tree.blackboard.keys)
+                {
                     dropdown.choices.Add(key);
                 }
-                dropdown.choices.Sort((left, right) => {
+                dropdown.choices.Sort((left, right) =>
+                {
                     return left.name.CompareTo(right.name);
                 });
             });
 
-            dropdown.RegisterCallback<ChangeEvent<BlackboardKey>>((evt) => {
+            dropdown.RegisterCallback<ChangeEvent<BlackboardKey>>((evt) =>
+            {
                 BlackboardKey newKey = evt.newValue;
                 reference.managedReferenceValue = newKey;
                 BehaviourTreeEditorWindow.Instance.CurrentSerializer.ApplyChanges();
@@ -137,10 +164,14 @@ namespace TheKiwiCoder {
             return dropdown;
         }
 
-        private string FormatItem(BlackboardKey item) {
-            if (item == null) {
+        private string FormatItem(BlackboardKey item)
+        {
+            if (item == null)
+            {
                 return "(null)";
-            } else {
+            }
+            else
+            {
                 return item.name;
             }
         }

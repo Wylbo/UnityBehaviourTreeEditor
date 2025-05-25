@@ -2,11 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace TheKiwiCoder {
-    public abstract class DecoratorNode : Node {
+namespace Wylbo
+{
+    public abstract class DecoratorNode : Node
+    {
 
         [SerializeReference]
-        [HideInInspector] 
+        [HideInInspector]
         public Node child;
     }
 }

@@ -4,10 +4,12 @@ using UnityEngine.UIElements;
 using UnityEditor;
 using System;
 
-namespace TheKiwiCoder {
+namespace Wylbo
+{
 
     [UxmlElement]
-    public partial class OverlayView : VisualElement {
+    public partial class OverlayView : VisualElement
+    {
 
         public Action<BehaviourTree> OnTreeSelected;
 
@@ -19,7 +21,8 @@ namespace TheKiwiCoder {
         string PathColumn = "Path";
         List<string> assetPaths;
 
-        Column CreateColumn(string name) {
+        Column CreateColumn(string name)
+        {
             var column = new Column();
             column.name = name;
             column.title = name;
@@ -28,7 +31,8 @@ namespace TheKiwiCoder {
             return column;
         }
 
-        MultiColumnListView CreateListView() {
+        MultiColumnListView CreateListView()
+        {
 
             var listView = new MultiColumnListView();
             listView.showBorder = true;
@@ -51,20 +55,23 @@ namespace TheKiwiCoder {
             return listView;
         }
 
-        private void BindName(VisualElement element, int index) {
+        private void BindName(VisualElement element, int index)
+        {
             Label label = element as Label;
             label.style.unityTextAlign = TextAnchor.MiddleLeft;
             var fileName = System.IO.Path.GetFileNameWithoutExtension(assetPaths[index]);
             label.text = fileName;
         }
 
-        private void BindPath(VisualElement element, int index) {
+        private void BindPath(VisualElement element, int index)
+        {
             Label label = element as Label;
             label.style.unityTextAlign = TextAnchor.MiddleLeft;
             label.text = assetPaths[index];
         }
 
-        public void Show() {
+        public void Show()
+        {
             // Hidden in UIBuilder while editing..
             style.display = DisplayStyle.Flex;
             style.visibility = Visibility.Visible;
@@ -87,43 +94,52 @@ namespace TheKiwiCoder {
             projectListView.selectionChanged += OnSelectionChanged;
         }
 
-        private void OnSelectionChanged(IEnumerable<object> obj) {
+        private void OnSelectionChanged(IEnumerable<object> obj)
+        {
             OnOpenAsset();
         }
 
-        public void Hide() {
+        public void Hide()
+        {
             style.visibility = Visibility.Hidden;
         }
 
-        public string ToMenuFormat(string one) {
+        public string ToMenuFormat(string one)
+        {
             // Using the slash creates submenus...
             return one.Replace("/", "|");
         }
 
-        public string ToAssetFormat(string one) {
+        public string ToAssetFormat(string one)
+        {
             // Using the slash creates submenus...
             return one.Replace("|", "/");
         }
 
-        void OnOpenAsset() {
+        void OnOpenAsset()
+        {
             var path = assetPaths[projectListView.selectedIndex];
 
             BehaviourTree tree = AssetDatabase.LoadAssetAtPath<BehaviourTree>(path);
-            if (tree) {
+            if (tree)
+            {
                 TreeSelected(tree);
                 style.visibility = Visibility.Hidden;
             }
         }
 
-        void OnCreateAsset() {
+        void OnCreateAsset()
+        {
             BehaviourTree tree = EditorUtility.CreateNewTree();
-            if (tree) {
+            if (tree)
+            {
                 TreeSelected(tree);
                 style.visibility = Visibility.Hidden;
             }
         }
 
-        void TreeSelected(BehaviourTree tree) {
+        void TreeSelected(BehaviourTree tree)
+        {
             OnTreeSelected.Invoke(tree);
         }
     }

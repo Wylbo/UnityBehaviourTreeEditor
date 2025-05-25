@@ -2,10 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.UIElements;
 
-namespace TheKiwiCoder {
+namespace Wylbo
+{
 
     [UxmlElement]
-    public partial class SplitView : TwoPaneSplitView {
-        
+    public partial class SplitView : TwoPaneSplitView
+    {
+
     }
 }

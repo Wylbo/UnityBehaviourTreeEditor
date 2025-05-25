@@ -6,27 +6,33 @@ using UnityEditor;
 using UnityEngine.UIElements;
 using UnityEditor.Experimental.GraphView;
 
-namespace TheKiwiCoder {
-    public class HierarchySelector : MouseManipulator {
+namespace Wylbo
+{
+    public class HierarchySelector : MouseManipulator
+    {
 
-        protected override void RegisterCallbacksOnTarget() {
+        protected override void RegisterCallbacksOnTarget()
+        {
             target.RegisterCallback<MouseDownEvent>(OnMouseDown);
         }
 
-        protected override void UnregisterCallbacksFromTarget() {
+        protected override void UnregisterCallbacksFromTarget()
+        {
             target.UnregisterCallback<MouseDownEvent>(OnMouseDown);
         }
 
-        private void OnMouseDown(MouseDownEvent evt) {
+        private void OnMouseDown(MouseDownEvent evt)
+        {
             if (!CanStopManipulation(evt))
-                return; 
-            
+                return;
+
             var graphView = target as BehaviourTreeView;
             if (graphView == null)
                 return;
 
             NodeView clickedElement = evt.target as NodeView;
-            if (clickedElement == null) {
+            if (clickedElement == null)
+            {
                 var ve = evt.target as VisualElement;
                 clickedElement = ve.GetFirstAncestorOfType<NodeView>();
                 if (clickedElement == null)
@@ -34,15 +40,18 @@ namespace TheKiwiCoder {
             }
 
             bool forceSelectNodeHierarchy = BehaviourTreeEditorWindow.Instance.settings.autoSelectNodeHierarchy;
-            if (evt.ctrlKey || forceSelectNodeHierarchy) {
+            if (evt.ctrlKey || forceSelectNodeHierarchy)
+            {
                 graphView.ClearSelection();
                 SelectChildren(evt, graphView, clickedElement);
             }
         }
 
-        void SelectChildren(MouseDownEvent evt, BehaviourTreeView graphView, NodeView clickedElement) {
+        void SelectChildren(MouseDownEvent evt, BehaviourTreeView graphView, NodeView clickedElement)
+        {
             // Add children to selection so the root element can be moved
-            BehaviourTree.Traverse(clickedElement.node, node => {
+            BehaviourTree.Traverse(clickedElement.node, node =>
+            {
                 var view = graphView.FindNodeView(node);
                 graphView.AddToSelection(view);
             });

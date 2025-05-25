@@ -5,13 +5,17 @@ using UnityEditor;
 using UnityEditor.UIElements;
 using UnityEngine.UIElements;
 
-namespace TheKiwiCoder {
+namespace Wylbo
+{
 
     [CustomPropertyDrawer(typeof(BlackboardKey))]
-    public class BlackboardKeyPropertyDrawer : PropertyDrawer {
+    public class BlackboardKeyPropertyDrawer : PropertyDrawer
+    {
 
-        public override VisualElement CreatePropertyGUI(SerializedProperty property) {
-            if (property.propertyType != SerializedPropertyType.ArraySize) {
+        public override VisualElement CreatePropertyGUI(SerializedProperty property)
+        {
+            if (property.propertyType != SerializedPropertyType.ArraySize)
+            {
 
                 Label keyName = new Label();
                 TextField renameField = new TextField();
@@ -23,7 +27,8 @@ namespace TheKiwiCoder {
 
                 renameField.style.display = DisplayStyle.None;
                 renameField.bindingPath = nameof(BlackboardKey.name);
-                renameField.RegisterCallback<BlurEvent>((evt) => {
+                renameField.RegisterCallback<BlurEvent>((evt) =>
+                {
                     keyValue.style.display = DisplayStyle.Flex;
                     keyName.style.display = DisplayStyle.Flex;
                     renameField.style.display = DisplayStyle.None;
@@ -33,7 +38,8 @@ namespace TheKiwiCoder {
                 keyValue.style.flexGrow = 1.0f;
                 keyValue.bindingPath = nameof(BlackboardKey<object>.value);
 
-                container.AddManipulator(new ContextualMenuManipulator((evt) => {
+                container.AddManipulator(new ContextualMenuManipulator((evt) =>
+                {
                     evt.menu.AppendAction("Delete", (x) => BehaviourTreeEditorWindow.Instance.CurrentSerializer.DeleteBlackboardKey(property.displayName), DropdownMenuAction.AlwaysEnabled);
                 }));
 
@@ -42,8 +48,10 @@ namespace TheKiwiCoder {
                 container.Add(renameField);
                 container.Add(keyValue);
 
-                keyName.RegisterCallback<MouseDownEvent>((evt) => {
-                    if (evt.clickCount == 2) {
+                keyName.RegisterCallback<MouseDownEvent>((evt) =>
+                {
+                    if (evt.clickCount == 2)
+                    {
                         renameField.value = keyName.text;
                         renameField.style.display = DisplayStyle.Flex;
                         renameField.Focus();

@@ -2,23 +2,29 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace TheKiwiCoder {
-    [System.Serializable]
-    public class Sequencer : CompositeNode {
+namespace Wylbo
+{
+	[System.Serializable]
+	public class Sequencer : CompositeNode
+	{
 
 		int current = 0;
 
-		protected override void OnStart() {
+		protected override void OnStart()
+		{
 			current = 0;
 		}
 
-		protected override void OnStop() {
+		protected override void OnStop()
+		{
 		}
 
-		protected override State OnUpdate() {
+		protected override State OnUpdate()
+		{
 			Node child = children[current];
 
-			switch (child.Update()) {
+			switch (child.Update())
+			{
 				case State.Running:
 					return State.Running;
 				case State.Failure:

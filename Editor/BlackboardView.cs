@@ -7,10 +7,12 @@ using UnityEditor.UIElements;
 using UnityEngine;
 using System.ComponentModel;
 
-namespace TheKiwiCoder {
+namespace Wylbo
+{
 
     [UxmlElement]
-    public partial class BlackboardView : VisualElement {
+    public partial class BlackboardView : VisualElement
+    {
 
         private SerializedBehaviourTree behaviourTree;
 
@@ -20,7 +22,8 @@ namespace TheKiwiCoder {
 
         private Button createButton;
 
-        internal void Bind(SerializedBehaviourTree behaviourTree) {
+        internal void Bind(SerializedBehaviourTree behaviourTree)
+        {
 
             this.behaviourTree = behaviourTree;
 
@@ -32,10 +35,13 @@ namespace TheKiwiCoder {
 
             // ListView
             listView.Bind(behaviourTree.serializedObject);
-            listView.RegisterCallback<KeyDownEvent>((e) => {
-                if (e.keyCode == KeyCode.Delete) {
+            listView.RegisterCallback<KeyDownEvent>((e) =>
+            {
+                if (e.keyCode == KeyCode.Delete)
+                {
                     var key = listView.selectedItem as SerializedProperty;
-                    if (key != null) {
+                    if (key != null)
+                    {
                         BehaviourTreeEditorWindow.Instance.CurrentSerializer.DeleteBlackboardKey(key.displayName);
                     }
                 }
@@ -47,12 +53,15 @@ namespace TheKiwiCoder {
             newKeyTypeField.formatSelectedValueCallback = FormatItem;
 
             var types = TypeCache.GetTypesDerivedFrom<BlackboardKey>();
-            foreach (var type in types) {
-                if (type.IsGenericType) {
+            foreach (var type in types)
+            {
+                if (type.IsGenericType)
+                {
                     continue;
                 }
                 newKeyTypeField.choices.Add(type);
-                if (newKeyTypeField.value == null) {
+                if (newKeyTypeField.value == null)
+                {
                     newKeyTypeField.value = type;
                 }
             }
@@ -60,7 +69,8 @@ namespace TheKiwiCoder {
             popupContainer.Add(newKeyTypeField);
 
             // TextField
-            newKeyTextField.RegisterCallback<ChangeEvent<string>>((evt) => {
+            newKeyTextField.RegisterCallback<ChangeEvent<string>>((evt) =>
+            {
                 ValidateButton();
             });
 
@@ -71,22 +81,29 @@ namespace TheKiwiCoder {
             ValidateButton();
         }
 
-        private string FormatItem(Type arg) {
-            if (arg == null) {
+        private string FormatItem(Type arg)
+        {
+            if (arg == null)
+            {
                 return "(null)";
-            } else {
+            }
+            else
+            {
                 return arg.Name.Replace("Key", "");
             }
         }
 
-        private void ValidateButton() {
+        private void ValidateButton()
+        {
             // Disable the create button if trying to create a non-unique key
             bool isValidKeyText = ValidateKeyText(newKeyTextField.text);
             createButton.SetEnabled(isValidKeyText);
         }
 
-        bool ValidateKeyText(string text) {
-            if (text == "") {
+        bool ValidateKeyText(string text)
+        {
+            if (text == "")
+            {
                 return false;
             }
 
@@ -95,17 +112,21 @@ namespace TheKiwiCoder {
             return !keyExists;
         }
 
-        void CreateNewKey() {
+        void CreateNewKey()
+        {
             Type newKeyType = newKeyTypeField.value;
-            if (newKeyType != null) {
+            if (newKeyType != null)
+            {
                 behaviourTree.CreateBlackboardKey(newKeyTextField.text, newKeyType);
             }
             ValidateButton();
         }
 
-        public void ClearView() {
+        public void ClearView()
+        {
             this.behaviourTree = null;
-            if (listView != null) {
+            if (listView != null)
+            {
                 listView.Unbind();
             }
         }

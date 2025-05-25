@@ -6,9 +6,11 @@ using UnityEditor;
 using UnityEditor.UIElements;
 using UnityEditor.Experimental.GraphView;
 
-namespace TheKiwiCoder {
+namespace Wylbo
+{
 
-    public class CreateNodeWindow : ScriptableObject, ISearchWindowProvider {
+    public class CreateNodeWindow : ScriptableObject, ISearchWindowProvider
+    {
 
         Texture2D icon;
         BehaviourTreeView treeView;
@@ -16,27 +18,33 @@ namespace TheKiwiCoder {
         bool isSourceParent;
         EditorUtility.ScriptTemplate[] scriptFileAssets;
 
-        TextAsset GetScriptTemplate(int type) {
+        TextAsset GetScriptTemplate(int type)
+        {
             var projectSettings = BehaviourTreeProjectSettings.GetOrCreateSettings();
 
-            switch (type) {
+            switch (type)
+            {
                 case 0:
-                    if (projectSettings.scriptTemplateActionNode) {
+                    if (projectSettings.scriptTemplateActionNode)
+                    {
                         return projectSettings.scriptTemplateActionNode;
                     }
                     return BehaviourTreeEditorWindow.Instance.scriptTemplateActionNode;
                 case 1:
-                    if (projectSettings.scriptTemplateConditionNode) {
+                    if (projectSettings.scriptTemplateConditionNode)
+                    {
                         return projectSettings.scriptTemplateConditionNode;
                     }
                     return BehaviourTreeEditorWindow.Instance.scriptTemplateConditionNode;
                 case 2:
-                    if (projectSettings.scriptTemplateCompositeNode) {
+                    if (projectSettings.scriptTemplateCompositeNode)
+                    {
                         return projectSettings.scriptTemplateCompositeNode;
                     }
                     return BehaviourTreeEditorWindow.Instance.scriptTemplateCompositeNode;
                 case 3:
-                    if (projectSettings.scriptTemplateDecoratorNode) {
+                    if (projectSettings.scriptTemplateDecoratorNode)
+                    {
                         return projectSettings.scriptTemplateDecoratorNode;
                     }
                     return BehaviourTreeEditorWindow.Instance.scriptTemplateDecoratorNode;
@@ -46,7 +54,8 @@ namespace TheKiwiCoder {
             return null;
         }
 
-        public void Initialise(BehaviourTreeView treeView, NodeView source, bool isSourceParent) {
+        public void Initialise(BehaviourTreeView treeView, NodeView source, bool isSourceParent)
+        {
             this.treeView = treeView;
             this.source = source;
             this.isSourceParent = isSourceParent;
@@ -63,7 +72,8 @@ namespace TheKiwiCoder {
             };
         }
 
-        public List<SearchTreeEntry> CreateSearchTree(SearchWindowContext context) {
+        public List<SearchTreeEntry> CreateSearchTree(SearchWindowContext context)
+        {
 
             var tree = new List<SearchTreeEntry>
             {
@@ -71,13 +81,16 @@ namespace TheKiwiCoder {
             };
 
             // Action nodes can only be added as children
-            if (isSourceParent || source == null) {
+            if (isSourceParent || source == null)
+            {
                 tree.Add(new SearchTreeGroupEntry(new GUIContent("Actions")) { level = 1 });
                 var types = TypeCache.GetTypesDerivedFrom<ActionNode>();
-                foreach (var type in types) {
+                foreach (var type in types)
+                {
 
                     // Ignore condition types
-                    if (!type.IsSubclassOf(typeof(ConditionNode))) {
+                    if (!type.IsSubclassOf(typeof(ConditionNode)))
+                    {
                         System.Action invoke = () => CreateNode(type, context);
                         tree.Add(new SearchTreeEntry(new GUIContent($"{type.Name}")) { level = 2, userData = invoke });
                     }
@@ -85,10 +98,12 @@ namespace TheKiwiCoder {
             }
 
             // Condition nodes can only be added as children
-            if (isSourceParent || source == null) {
+            if (isSourceParent || source == null)
+            {
                 tree.Add(new SearchTreeGroupEntry(new GUIContent("Conditions")) { level = 1 });
                 var types = TypeCache.GetTypesDerivedFrom<ConditionNode>();
-                foreach (var type in types) {
+                foreach (var type in types)
+                {
                     System.Action invoke = () => CreateNode(type, context);
                     tree.Add(new SearchTreeEntry(new GUIContent($"{type.Name}")) { level = 2, userData = invoke });
                 }
@@ -98,7 +113,8 @@ namespace TheKiwiCoder {
                 tree.Add(new SearchTreeGroupEntry(new GUIContent("Composites")) { level = 1 });
                 {
                     var types = TypeCache.GetTypesDerivedFrom<CompositeNode>();
-                    foreach (var type in types) {
+                    foreach (var type in types)
+                    {
                         System.Action invoke = () => CreateNode(type, context);
                         tree.Add(new SearchTreeEntry(new GUIContent($"{type.Name}")) { level = 2, userData = invoke });
                     }
@@ -109,7 +125,8 @@ namespace TheKiwiCoder {
                 tree.Add(new SearchTreeGroupEntry(new GUIContent("Decorators")) { level = 1 });
                 {
                     var types = TypeCache.GetTypesDerivedFrom<DecoratorNode>();
-                    foreach (var type in types) {
+                    foreach (var type in types)
+                    {
                         System.Action invoke = () => CreateNode(type, context);
                         tree.Add(new SearchTreeEntry(new GUIContent($"{type.Name}")) { level = 2, userData = invoke });
                     }
@@ -120,10 +137,12 @@ namespace TheKiwiCoder {
                 tree.Add(new SearchTreeGroupEntry(new GUIContent("Subtrees")) { level = 1 });
                 {
                     var behaviourTrees = EditorUtility.GetAssetPaths<BehaviourTree>();
-                    behaviourTrees.ForEach(path => {
+                    behaviourTrees.ForEach(path =>
+                    {
                         var fileName = System.IO.Path.GetFileName(path);
 
-                        System.Action invoke = () => {
+                        System.Action invoke = () =>
+                        {
                             var tree = AssetDatabase.LoadAssetAtPath<BehaviourTree>(path);
                             var subTreeNodeView = CreateNode(typeof(SubTree), context);
                             SubTree subtreeNode = subTreeNodeView.node as SubTree;
@@ -152,9 +171,11 @@ namespace TheKiwiCoder {
             }
 
             {
-                System.Action invoke = () => {
+                System.Action invoke = () =>
+                {
                     var newTree = EditorUtility.CreateNewTree();
-                    if (newTree) {
+                    if (newTree)
+                    {
                         var subTreeNodeView = CreateNode(typeof(SubTree), context);
                         SubTree subtreeNode = subTreeNodeView.node as SubTree;
                         subtreeNode.treeAsset = newTree;
@@ -167,13 +188,15 @@ namespace TheKiwiCoder {
             return tree;
         }
 
-        public bool OnSelectEntry(SearchTreeEntry searchTreeEntry, SearchWindowContext context) {
+        public bool OnSelectEntry(SearchTreeEntry searchTreeEntry, SearchWindowContext context)
+        {
             System.Action invoke = (System.Action)searchTreeEntry.userData;
             invoke();
             return true;
         }
 
-        public NodeView CreateNode(System.Type type, SearchWindowContext context) {
+        public NodeView CreateNode(System.Type type, SearchWindowContext context)
+        {
             BehaviourTreeEditorWindow editorWindow = BehaviourTreeEditorWindow.Instance;
 
             var windowMousePosition = editorWindow.rootVisualElement.ChangeCoordinatesTo(editorWindow.rootVisualElement.parent, context.screenMousePosition - editorWindow.position.position);
@@ -186,13 +209,19 @@ namespace TheKiwiCoder {
 
             // #TODO: Unify this with CreatePendingScriptNode
             NodeView createdNode;
-            if (source != null) {
-                if (isSourceParent) {
+            if (source != null)
+            {
+                if (isSourceParent)
+                {
                     createdNode = treeView.CreateNode(type, nodePosition, source);
-                } else {
+                }
+                else
+                {
                     createdNode = treeView.CreateNodeWithChild(type, nodePosition, source);
                 }
-            } else {
+            }
+            else
+            {
                 createdNode = treeView.CreateNode(type, nodePosition, null);
             }
 
@@ -200,7 +229,8 @@ namespace TheKiwiCoder {
             return createdNode;
         }
 
-        public void CreateScript(EditorUtility.ScriptTemplate scriptTemplate, SearchWindowContext context) {
+        public void CreateScript(EditorUtility.ScriptTemplate scriptTemplate, SearchWindowContext context)
+        {
             BehaviourTreeEditorWindow editorWindow = BehaviourTreeEditorWindow.Instance;
 
             var windowMousePosition = editorWindow.rootVisualElement.ChangeCoordinatesTo(editorWindow.rootVisualElement.parent, context.screenMousePosition - editorWindow.position.position);
@@ -211,7 +241,8 @@ namespace TheKiwiCoder {
             EditorUtility.CreateNewScript(scriptTemplate, source, isSourceParent, nodePosition);
         }
 
-        public static void Show(Vector2 mousePosition, NodeView source, bool isSourceParent = false) {
+        public static void Show(Vector2 mousePosition, NodeView source, bool isSourceParent = false)
+        {
             Vector2 screenPoint = GUIUtility.GUIToScreenPoint(mousePosition);
             CreateNodeWindow searchWindowProvider = ScriptableObject.CreateInstance<CreateNodeWindow>();
             searchWindowProvider.Initialise(BehaviourTreeEditorWindow.Instance.CurrentTreeView, source, isSourceParent);
