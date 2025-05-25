@@ -24,7 +24,7 @@ namespace Wylbo
         const string sPropRootNode = nameof(BehaviourTree.rootNode);
         const string sPropNodes = nameof(BehaviourTree.nodes);
         const string sPropBlackboard = nameof(BehaviourTree.blackboard);
-        const string sPropBlackboardKeys = nameof(TheKiwiCoder.Blackboard.keys);
+        const string sPropBlackboardKeys = nameof(Wylbo.Blackboard.keys);
         const string sPropGuid = nameof(Node.guid);
         const string sPropChild = nameof(DecoratorNode.child);
         const string sPropChildren = nameof(CompositeNode.children);
