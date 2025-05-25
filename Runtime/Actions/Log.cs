@@ -2,19 +2,24 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace TheKiwiCoder {
+namespace Wylbo
+{
     [System.Serializable]
-    public class Log : ActionNode {
+    public class Log : ActionNode
+    {
         [Tooltip("Message to log to the console")]
         public NodeProperty<string> message = new NodeProperty<string>();
 
-        protected override void OnStart() {
+        protected override void OnStart()
+        {
         }
 
-        protected override void OnStop() {
+        protected override void OnStop()
+        {
         }
 
-        protected override State OnUpdate() {
+        protected override State OnUpdate()
+        {
             Debug.Log($"{message.Value}");
             return State.Success;
         }

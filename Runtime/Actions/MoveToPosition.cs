@@ -5,10 +5,12 @@ using TheKiwiCoder;
 using System.IO;
 using UnityEngine.AI;
 
-namespace TheKiwiCoder {
+namespace Wylbo
+{
 
     [System.Serializable]
-    public class MoveToPosition : ActionNode {
+    public class MoveToPosition : ActionNode
+    {
 
         [Tooltip("How fast to move")]
         public NodeProperty<float> speed = new NodeProperty<float> { defaultValue = 5.0f };
@@ -28,8 +30,10 @@ namespace TheKiwiCoder {
         [Tooltip("Target Position")]
         public NodeProperty<Vector3> targetPosition = new NodeProperty<Vector3> { defaultValue = Vector3.zero };
 
-        protected override void OnStart() {
-            if (context.agent != null) {
+        protected override void OnStart()
+        {
+            if (context.agent != null)
+            {
                 context.agent.stoppingDistance = stoppingDistance.Value;
                 context.agent.speed = speed.Value;
                 context.agent.destination = targetPosition.Value;
@@ -39,50 +43,62 @@ namespace TheKiwiCoder {
             }
         }
 
-        protected override void OnStop() {
-            if (context.agent == null) {
+        protected override void OnStop()
+        {
+            if (context.agent == null)
+            {
                 return;
             }
 
-            if (!context.agent.enabled) {
+            if (!context.agent.enabled)
+            {
                 return;
             }
 
-            if (context.agent.pathPending) {
+            if (context.agent.pathPending)
+            {
                 context.agent.ResetPath();
             }
 
-            if (context.agent.remainingDistance > tolerance.Value) {
+            if (context.agent.remainingDistance > tolerance.Value)
+            {
                 context.agent.isStopped = true;
             }
         }
 
-        protected override State OnUpdate() {
-            if (context.agent == null) {
+        protected override State OnUpdate()
+        {
+            if (context.agent == null)
+            {
                 Debug.Log($"Game object {context.gameObject.name} is missing NavMeshAgent component");
                 return State.Failure;
             }
 
-            if (!context.agent.enabled) {
+            if (!context.agent.enabled)
+            {
                 Debug.Log($"NavMeshAgent component on {context.gameObject.name} was disabled");
                 return State.Failure;
             }
 
-            if (context.agent.pathPending) {
+            if (context.agent.pathPending)
+            {
                 return State.Running;
             }
 
-            if (context.agent.remainingDistance < tolerance.Value) {
+            if (context.agent.remainingDistance < tolerance.Value)
+            {
                 return State.Success;
             }
 
-            if (context.agent.pathStatus == UnityEngine.AI.NavMeshPathStatus.PathInvalid) {
+            if (context.agent.pathStatus == UnityEngine.AI.NavMeshPathStatus.PathInvalid)
+            {
                 return State.Failure;
             }
             return State.Running;
         }
 
-        public override void OnDrawGizmos() {
+        public override void OnDrawGizmos()
+        {
             var agent = context.agent;
             var transform = context.transform;
 
@@ -98,7 +114,8 @@ namespace TheKiwiCoder {
             Gizmos.color = Color.black;
             var agentPath = agent.path;
             Vector3 prevCorner = transform.position;
-            foreach (var corner in agentPath.corners) {
+            foreach (var corner in agentPath.corners)
+            {
                 Gizmos.DrawLine(prevCorner, corner);
                 Gizmos.DrawSphere(corner, 0.1f);
                 prevCorner = corner;
